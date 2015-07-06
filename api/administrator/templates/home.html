@@ -1,0 +1,148 @@
+
+<div class="content-wrapper" ng-controller="contentController" >
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            {{section}}
+            <small class="title"></small>
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content"  ng-hide="section == 'input' || section == 'update'">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" >Content</h3>
+                        <div class="pull-right">
+                            <button class="btn btn-primary" type="button" ng-click="addContent()">Tambah konten</button>
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body no-padding">
+
+                        <table class="table table-hover custom-table">
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Nama konten</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr ng-repeat="content in contents"  ng-click="showDetail(content)">
+                                <td>{{$index + 1}}</td>
+                                <td>{{content.judul}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-edit" ng-click="editContent(content)">Edit</button>
+                                    <button type="button" class="btn btn-danger btn-remove" ng-click="deleteContent(content)">Hapus</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Content Detail</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="alarm-item" ng-hide="content.judul!=null">
+                            Klik salah satu konten untuk melihat detail konten
+                        </div>
+                        <div class="content-detail" ng-if="content.judul!=null">
+                            <h3 align="center">{{content.judul}}</h3>
+                            <img ng-if="content.type == 1" src="{{imageurl}}{{content.body}}" class="img-responsive img-detail" alt=""/>
+                            <div class="videowrapper" ng-if="content.type == 2">
+                                <youtube-video video-url="content.body" ></youtube-video>
+                            </div>
+
+                            <ng-sc-track track="content.body" ng-if="content.type == 3"></ng-sc-track>
+
+                            <p>{{content.deskripsi}}
+                        </div>
+                        <p ng-if="monitor_alarm.length == 0">Tidak ada alarm yang perlu dinormalkan
+                    </div><!-- /.box-body -->
+                    <div class="box-footer text-center">
+                        <button type="button" class="btn btn-success" ng-if="alarm_selected == true && monitor_alarm.length > 0" ng-click="showAlarmDetail()">Penormalan</button>
+                        <button type="button" class="btn btn-primary" ng-if="alarm_selected == true && monitor_alarm.length > 0" ng-click="snoozeDetail()">Snooze</button>
+                    </div><!-- /.box-footer -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Main content -->
+    <section class="content" ng-hide="section == 'view' || section == null">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Konten</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <form novalidate role="form" class="form-horizontal" ng-submit="processContent(content)" enctype="multipart/form-data">
+                            <input type="hidden" name="id_user" ng-model="content.id_user" id="id_user"  />
+                            <input type="hidden" name="status" ng-model="content.status" id="status"  />
+                            <input type="hidden" name="id_content" ng-model="content.id_content" id="id_content"  />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Judul</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" placeholder="Judul content" required ng-model="content.judul">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Kategori</label>
+                                <div class="col-sm-10">
+                                    <select ng-options='option.id_kategori as option.kategori for option in kategori_content'  class="form-control" ng-model="content.id_kategori">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Tipe content</label>
+                                <div class="col-sm-10">
+                                    <select ng-options='option.value as option.name for option in content_type'  class="form-control " ng-model="content.type">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-hide="content.type != 1">
+                                <label class="col-sm-2 control-label">Gambar</label>
+                                <div class="col-sm-10">
+                                    <div class="btn btn-primary" ngf-select ng-model="files">Upload file</div>
+                                    <br><span ng-if="files">Image thumbnail: <img ngf-src="files[0]" ngf-default-src="/thumb.jpg" ngf-accept="'image/*'" width="100"></span>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-hide="content.type == 1">
+                                <label class="col-sm-2 control-label">URL</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" placeholder="Content" ng-model="content.body"  required> 
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Deskripsi</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" placeholder="Deskripsi" ng-model="content.deskripsi" rows="4" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" name="submit" class="btn bg-orange" value="submit">Simpan</button>
+                                    <button id="reset" type="button" class="btn bg-navy" ng-click="doneEdit()">Cancel</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

@@ -34,7 +34,10 @@ $app = new Micro($di);
 $app->get('/',function() use($app){
     echo 'Welcome to kajian API';
 });
-require_once('routes/content.php');
+foreach (glob("routes/*.php") as $filename)
+{
+    include $filename;
+}
 $app->notFound(function () use ($app) {
     $app->response->setStatusCode(404, "Not Found")->sendHeaders();
     echo 'This is crazy, but this page was not found!';

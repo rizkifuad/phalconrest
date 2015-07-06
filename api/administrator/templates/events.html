@@ -1,0 +1,97 @@
+
+<div class="content-wrapper" ng-controller="eventController" >
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            {{section}}
+            <small class="title"></small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Events</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content"  ng-hide="section == 'input' || section == 'update'">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" >Events</h3>
+                        <div class="pull-right">
+                            <button class="btn btn-primary" type="button" ng-click="addEvent()">Tambah events</button>
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body no-padding">
+
+                        <table class="table table-hover custom-table">
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Nama event</th>
+                                <th>Deskripsi</th>
+                                <th>Tanggal</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr ng-repeat="event in events">
+                                <td>{{$index + 1}}</td>
+                                <td>{{event.judul}}</td>
+                                <td>{{event.deskripsi}}</td>
+                                <td>{{getDate(event.tanggal)}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-edit" ng-click="editEvent(event)">Edit</button>
+                                    <button type="button" class="btn btn-danger btn-remove" ng-click="deleteEvent(event)">Hapus</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Main content -->
+    <section class="content" ng-hide="section == 'view'">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Events</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <form novalidate role="form" class="form-horizontal" ng-submit="processEvent(event)">
+                            <input type="hidden" name="id_kategori" ng-model="event.id_event">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Nama event</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" placeholder="Judul" required ng-model="event.judul">
+                                </div>
+                            </div>
+
+                            <div class="form-group"<>
+                                <label class="col-sm-2 control-label">Deskripsi</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" placeholder="Deskripsi" ng-model="event.deskripsi" rows="4" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Tanggal</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control date" placeholder="Tanggal" required ng-model="event.tanggal">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" name="submit" class="btn bg-orange" value="submit">Simpan</button>
+                                    <button id="reset" type="button" class="btn bg-navy" ng-click="doneEdit()">Cancel</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

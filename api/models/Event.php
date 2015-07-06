@@ -4,6 +4,6 @@ use Phalcon\Mvc\Model\Message;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Phalcon\Mvc\Model\Validator\InclusionIn;
 
-class Events extends Model
+class Event extends Model
 {
 }
