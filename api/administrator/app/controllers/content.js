@@ -62,7 +62,6 @@ app.controller('contentController', ['$rootScope','$scope','$resource','$locatio
             });
         };
         $scope.editContent = function(content){
-            $scope.pause();
             $scope.content = content;
             $scope.section = 'update';
             console.log($scope.content);
