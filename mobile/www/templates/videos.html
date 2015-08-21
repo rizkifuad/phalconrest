@@ -1,0 +1,22 @@
+<ion-view align-title="left" view-title="Videos">
+  <ion-content>
+      <ion-refresher
+          pulling-text="Pull to refresh..."
+          on-refresh="doRefresh()">
+      </ion-refresher>
+        <!--
+           -<div class="video-container">
+           -   <iframe width="560" height="315" src="http://www.youtube.com/embed/ZjPRj2Vp74U" frameborder="0" allowfullscreen></iframe>
+           -    
+           -</div>
+           -->
+
+      <div class="row content" ng-repeat="content in split_contents">
+          <div class="col col-33" ng-repeat="c in content">
+              <div class="video-content" ng-click="detail({{c.id_content}})" image-lazy-src="http://img.youtube.com/vi/{{getId(c.body)}}/0.jpg" image-lazy-background-image="true">
+              </div>
+          </div>
+      </div>
+      </div>
+  </ion-content>
+</ion-view>

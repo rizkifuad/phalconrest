@@ -1,0 +1,22 @@
+<ion-view align-title="left" view-title="Videos">
+  <ion-content>
+      <ion-refresher
+          pulling-text="Pull to refresh..."
+          on-refresh="doRefresh()">
+     </ion-refresher>
+      <div class="gambar_content">
+        <div class="video-container">
+
+            <div class="videowrapper" >
+                <youtube-video video-url="content.body" ></youtube-video> 
+            </div>
+           <!--<iframe width="560" height="315" src="http://www.youtube.com/embed/ZjPRj2Vp74U" frameborder="0" allowfullscreen></iframe>-->
+            
+<button class="button button-bottom button-bottom-right button-calm" ng-click="share(content)">
+     <i class="icon ion-android-share"></i> 
+    Share
+</button>
+        </div>
+      </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,18 @@
+<ion-view align-title="center" view-title="Gambar">
+  <ion-content class="gambar-detail" padding="true" scroll="false">
+      <div id="container-imgdetail" style="position:fixed;display:inline;top:0;right:0;bottom:45px;left:0;">
+          <div id="content-imgdetail" style="position:fixed;display:inline;right:0;left:0;top:0;bottom:45px;-webkit-transform-origin: 0 0;margin-top:45px;">
+              <img image-lazy-src="{{urlBase}}/{{content.body}}" class="img-detail" zoomable id="image-scrollable">
+          </div>
+<button class="button button-bottom button-royal" ng-click="downloadFile(content.body)">
+     <i class="icon ion-android-download"></i> 
+    Download
+</button>
+<button class="button button-bottom button-bottom-right button-calm" ng-click="share(content)">
+     <i class="icon ion-android-share"></i> 
+    Share
+</button>
+
+      </div>
+  </ion-content>
+</ion-view>
