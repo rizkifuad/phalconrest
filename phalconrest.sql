@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 08, 2015 at 03:13 PM
+-- Generation Time: Aug 21, 2015 at 12:33 PM
 -- Server version: 10.0.20-MariaDB-log
 -- PHP Version: 5.6.11
 
@@ -36,18 +36,37 @@ CREATE TABLE IF NOT EXISTS `content` (
   `deskripsi` text NOT NULL,
   `status` int(1) NOT NULL,
   `uploadedAt` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `content`
 --
 
 INSERT INTO `content` (`id_content`, `id_kategori`, `id_user`, `judul`, `body`, `type`, `deskripsi`, `status`, `uploadedAt`) VALUES
-(26, 1, 1, 'sad', '842658-archlinux.jpg', 1, 'sasad', 1, '2015-07-06 00:00:00'),
-(27, 1, 1, 'asfd', 'col.jpg', 1, 'sfd', 1, '2015-07-06 00:00:00'),
-(28, 1, 1, 'asd', 'https://www.youtube.com/watch?v=Jb2stN7kH28', 2, 'sad', 1, '2015-07-06 00:00:00'),
-(29, 1, 1, 'asd', 'https://www.youtube.com/watch?v=aGgstpdoxPo', 2, 'sadasd', 1, '2015-07-06 00:00:00'),
-(30, 1, 1, 'asd', 'https://soundcloud.com/nanobii/sugar-rush', 3, 'sad', 1, '2015-07-06 00:00:00');
+(41, 1, 1, 'neovim', 'data/ZFmouJJZli/ZFmouJJZli.png', 1, 'dsf', 1, '2015-08-14 00:00:00'),
+(42, 1, 1, 'sfd', 'data/pygonhaKh8/pygonhaKh8.jpg', 1, 'sfd', 1, '2015-08-14 00:00:00'),
+(43, 1, 1, 'dsf', 'data/ToipXS0YqU/ToipXS0YqU.jpg', 1, 'vgn', 1, '2015-08-14 00:00:00'),
+(44, 1, 1, 'sgdf', 'data/uMM7c6iFjM/uMM7c6iFjM.jpg', 1, 'dsfg', 1, '2015-08-14 00:00:00'),
+(45, 1, 1, 'sdf', 'data/vOWkvfEBN0/vOWkvfEBN0.jpg', 1, 'sdf', 1, '2015-08-14 00:00:00'),
+(46, 1, 1, 'saa', 'data/Eu19KScaRz/Eu19KScaRz.gif', 1, 'asd', 1, '2015-08-14 00:00:00'),
+(47, 1, 1, 'sfd', 'https://www.youtube.com/watch?v=CduA0TULnow', 2, 'sadfsadf', 1, '2015-08-14 00:00:00'),
+(48, 1, 1, 'Mirror', 'https://www.youtube.com/watch?v=uuZE_IRwLNI', 2, 'asd', 1, '2015-08-14 00:00:00'),
+(49, 1, 1, 'Her go', 'https://www.youtube.com/watch?v=RBumgq5yVrA', 2, 'dsa', 1, '2015-08-14 00:00:00'),
+(50, 1, 1, 'Bruno', 'https://www.youtube.com/watch?v=LjhCEhWiKXk', 2, 'asd', 1, '2015-08-14 00:00:00'),
+(51, 1, 1, 'sad', 'https://www.youtube.com/watch?v=3gOHvDP_vCs', 2, 'asd', 1, '2015-08-14 00:00:00'),
+(52, 7, 1, 'asf', 'https://soundcloud.com/laszlomusic/laszlo-fall-to-light', 3, 'asd', 1, '2015-08-14 00:00:00'),
+(53, 1, 1, 'sd', 'data/QbHwFBO0fr/QbHwFBO0fr.jpg', 1, 'sda', 1, '2015-08-15 00:00:00'),
+(54, 1, 1, 'zfds', 'data/WAr07tUgEk/WAr07tUgEk.jpg', 1, 'sdf', 1, '2015-08-15 00:00:00'),
+(55, 1, 1, 'ghhv', 'data/tP1OE8KB4d/tP1OE8KB4d.png', 1, 'kjhjh', 1, '2015-08-15 00:00:00'),
+(56, 1, 1, 'fghjk', 'data/XR8qckWG6h/XR8qckWG6h.jpg', 1, 'vbnm', 1, '2015-08-15 00:00:00'),
+(57, 1, 1, 'neovim', 'data/7rHUbMbflu/7rHUbMbflu.jpg', 1, 'dsf', 1, '2015-08-21 00:00:00'),
+(58, 1, 1, 'neovim', 'data/7rHUbMbflu/7rHUbMbflu.jpg', 1, 'dsf', 1, '2015-08-21 00:00:00'),
+(59, 1, 1, 'neovim', 'data/7rHUbMbflu/7rHUbMbflu.jpg', 1, 'dsf', 1, '2015-08-21 00:00:00'),
+(60, 1, 1, 'rtttt', 'data/DJGiPKL4QQ/DJGiPKL4QQ.jpg', 1, 'sadasd', 1, '2015-08-21 00:00:00'),
+(61, 1, 1, 'sfd', 'data/kO06yFK2FI/kO06yFK2FI.jpg', 1, 'asfd', 1, '2015-08-21 00:00:00'),
+(62, 1, 1, 'sdf', 'data/VZnXzJBVxL/VZnXzJBVxL.jpg', 1, 'asdf', 1, '2015-08-21 00:00:00'),
+(63, 1, 1, 'asdf', 'data/OL0iwuqgbM/OL0iwuqgbM.png', 1, 'sadf', 1, '2015-08-21 00:00:00'),
+(64, 1, 1, 'neovim', 'data/vtd0uBJA2R/vtd0uBJA2R.png', 1, 'dsf', 1, '2015-08-21 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -61,15 +80,17 @@ CREATE TABLE IF NOT EXISTS `event` (
   `deskripsi` text NOT NULL,
   `gambar` varchar(25) NOT NULL,
   `tanggal` datetime NOT NULL,
+  `alamat` text NOT NULL,
+  `koordinat` varchar(100) DEFAULT NULL,
   `status` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `event`
 --
 
-INSERT INTO `event` (`id_event`, `judul`, `deskripsi`, `gambar`, `tanggal`, `status`) VALUES
-(7, '666', '666', 'test', '2015-07-06 00:00:00', 1);
+INSERT INTO `event` (`id_event`, `judul`, `deskripsi`, `gambar`, `tanggal`, `alamat`, `koordinat`, `status`) VALUES
+(12, 'asd', 'ads', 'test', '2015-08-08 00:00:00', 'sdfg', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -83,16 +104,19 @@ CREATE TABLE IF NOT EXISTS `jadwal` (
   `deskripsi` text NOT NULL,
   `gambar` varchar(25) NOT NULL,
   `tanggal` datetime NOT NULL,
+  `alamat` text NOT NULL,
+  `koordinat` varchar(100) DEFAULT NULL,
   `durasi` int(10) NOT NULL,
   `status` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `jadwal`
 --
 
-INSERT INTO `jadwal` (`id_jadwal`, `judul`, `deskripsi`, `gambar`, `tanggal`, `durasi`, `status`) VALUES
-(1, '17 ramadhan', 'sadasdsdf', 'test', '2015-06-30 00:00:00', 2, 1);
+INSERT INTO `jadwal` (`id_jadwal`, `judul`, `deskripsi`, `gambar`, `tanggal`, `alamat`, `koordinat`, `durasi`, `status`) VALUES
+(9, 'sdaf', 'asfd', 'test', '2015-09-04 00:00:00', 'asdf', NULL, 2, 1),
+(10, 'sfd', 'asfd', 'test', '2015-09-03 00:00:00', 'esdfds', NULL, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -112,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `kategori` (
 
 INSERT INTO `kategori` (`id_kategori`, `kategori`, `deskripsi`) VALUES
 (1, 'Ramadhan', 'asd'),
-(7, 'asd', 'sad');
+(7, 'Lebaran', 'sad');
 
 -- --------------------------------------------------------
 
@@ -178,17 +202,17 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `content`
 --
 ALTER TABLE `content`
-  MODIFY `id_content` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+  MODIFY `id_content` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=65;
 --
 -- AUTO_INCREMENT for table `event`
 --
 ALTER TABLE `event`
-  MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `jadwal`
 --
 ALTER TABLE `jadwal`
-  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `kategori`
 --
