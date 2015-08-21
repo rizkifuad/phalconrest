@@ -13,7 +13,7 @@ function ($scope, $resource, $location,eventFactory) {
             console.log(data);
         })
         .error(function (error) {
-            $scope.status = 'Unable to load customer data: ' + error.message;
+            $scope.status = 'Unable to load customer data: ' + error.messages[0];
         });
     }
 
@@ -24,9 +24,11 @@ function ($scope, $resource, $location,eventFactory) {
         eventFactory.updateEvent(event)
         .success(function () {
             $scope.status = 'Updated Customer! Refreshing customer list.';
+            $scope.section = 'view';
         })
         .error(function (error) {
-            $scope.status = 'Unable to update customer: ' + error.message;
+            $scope.status = 'Unable to update customer: ' + error.messages[0];
+            alert($scope.status);
         });
     };
 
@@ -35,9 +37,11 @@ function ($scope, $resource, $location,eventFactory) {
         .success(function () {
             $scope.status = 'Inserted Customer! Refreshing customer list.';
             getEvents();
+            $scope.section = 'view';
         }).
             error(function(error) {
-            $scope.status = 'Unable to insert customer: ' + error.message;
+            $scope.status = 'Unable to insert customer: ' + error.messages[0];
+            alert($scope.status);
         });
     };
 
@@ -49,7 +53,8 @@ function ($scope, $resource, $location,eventFactory) {
             getEvents();
         })
         .error(function (error) {
-            $scope.status = 'Unable to delete customer: ' + error.message;
+            $scope.status = 'Unable to delete customer: ' + error.messages[0];
+            alert($scope.status);
         });
     };
     $scope.editEvent = function(event){
@@ -72,14 +77,16 @@ function ($scope, $resource, $location,eventFactory) {
 
     $scope.processEvent = function (event){
         event.gambar = "test";
-        event.status = 1;
-        event.tanggal = moment(event.tanggal,'DD/MM/YYYY').format('YYYY-MM-DD');
+        event.status= 1;
+
+        if(event.tanggal.indexOf('/') == -1){
+            event.tanggal = moment(event.tanggal,'DD/MM/YYYY').format('YYYY-MM-DD');
+        }
+
         if ($scope.section == "update") {
             $scope.updateEvent(event);
-            $scope.section = 'view';
         }else{
             $scope.insertEvent(event);
-            $scope.section = 'view';
         }
         
     };

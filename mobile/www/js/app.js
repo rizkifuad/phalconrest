@@ -4,9 +4,182 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('almunApp', ['ionic','ionicLazyLoad', 'almunApp.controllers','ngCordova','youtube-embed'])
+.service('ScrollRender', function() {
+    this.render = function(content) {
+        return (function(global) {
 
-.run(function($ionicPlatform) {
+            var docStyle = document.documentElement.style;
+
+            var engine;
+            if (global.opera && Object.prototype.toString.call(opera) === '[object Opera]') {
+                engine = 'presto';
+            } else if ('MozAppearance' in docStyle) {
+                engine = 'gecko';
+            } else if ('WebkitAppearance' in docStyle) {
+                engine = 'webkit';
+            } else if (typeof navigator.cpuClass === 'string') {
+                engine = 'trident';
+            }
+
+            var vendorPrefix = {
+                trident: 'ms',
+                gecko: 'Moz',
+                webkit: 'Webkit',
+                presto: 'O'
+            }[engine];
+
+            var helperElem = document.createElement("div");
+            var undef;
+
+            var perspectiveProperty = vendorPrefix + "Perspective";
+            var transformProperty = vendorPrefix + "Transform";
+
+            if (helperElem.style[perspectiveProperty] !== undef) {
+
+                return function(left, top, zoom) {
+                    content.style[transformProperty] = 'translate3d(' + (-left) + 'px,' + (-top) + 'px,0) scale(' + zoom + ')';
+                };
+
+            } else if (helperElem.style[transformProperty] !== undef) {
+
+                return function(left, top, zoom) {
+                    content.style[transformProperty] = 'translate(' + (-left) + 'px,' + (-top) + 'px) scale(' + zoom + ')';
+                };
+
+            } else {
+
+                return function(left, top, zoom) {
+                    content.style.marginLeft = left ? (-left / zoom) + 'px' : '';
+                    content.style.marginTop = top ? (-top / zoom) + 'px' : '';
+                    content.style.zoom = zoom || '';
+                };
+
+            }
+        })(this);
+    };
+
+})
+
+.directive('zoomable', function(ScrollRender) {
+    return {
+        link: function(scope, element, attrs) {
+            element.bind('load', function() {
+                // Intialize layout
+                var container = document.getElementById("container-imgdetail");
+                var content = document.getElementById("content-imgdetail");
+                var clientWidth = 0;
+                var clientHeight = 0;
+
+                // Initialize scroller
+                var scroller = new Scroller(ScrollRender.render(content), {
+                    scrollingX: true,
+                    scrollingY: true,
+                    animating: true,
+                    bouncing: true,
+                    locking: true,
+                    zooming: true,
+                    minZoom: 0.5,
+                    maxZoom: 2
+                });
+
+                // Initialize scrolling rect
+                var rect = container.getBoundingClientRect();
+                scroller.setPosition(rect.left + container.clientLeft, rect.top + container.clientTop);
+                
+                var image = document.getElementById('image-scrollable');
+                var contentWidth = image.width;
+                var contentHeight = image.height;
+
+                // Reflow handling
+                var reflow = function() {
+                    clientWidth = container.clientWidth;
+                    clientHeight = container.clientHeight;
+                    scroller.setDimensions(clientWidth, clientHeight, contentWidth, contentHeight);
+                };
+
+
+                window.addEventListener("resize", reflow, false);
+                reflow();
+
+                if ('ontouchstart' in window) {
+
+                    container.addEventListener("touchstart", function(e) {
+                        // Don't react if initial down happens on a form element
+                        if (e.touches[0] && e.touches[0].target && e.touches[0].target.tagName.match(/input|textarea|select/i)) {
+                            return;
+                        }
+
+                        scroller.doTouchStart(e.touches, e.timeStamp);
+                        e.preventDefault();
+                    }, false);
+
+                    document.addEventListener("touchmove", function(e) {
+                        scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
+                    }, false);
+
+                    document.addEventListener("touchend", function(e) {
+                        scroller.doTouchEnd(e.timeStamp);
+                    }, false);
+
+                    document.addEventListener("touchcancel", function(e) {
+                        scroller.doTouchEnd(e.timeStamp);
+                    }, false);
+
+                } else {
+
+                    var mousedown = false;
+
+                    container.addEventListener("mousedown", function(e) {
+                        if (e.target.tagName.match(/input|textarea|select/i)) {
+                            return;
+                        }
+
+                        scroller.doTouchStart([{
+                            pageX: e.pageX,
+                            pageY: e.pageY
+                        }], e.timeStamp);
+
+                        mousedown = true;
+                    }, false);
+
+                    document.addEventListener("mousemove", function(e) {
+                        if (!mousedown) {
+                            return;
+                        }
+
+                        scroller.doTouchMove([{
+                            pageX: e.pageX,
+                            pageY: e.pageY
+                        }], e.timeStamp);
+
+                        mousedown = true;
+                    }, false);
+
+                    document.addEventListener("mouseup", function(e) {
+                        if (!mousedown) {
+                            return;
+                        }
+
+                        scroller.doTouchEnd(e.timeStamp);
+
+                        mousedown = false;
+                    }, false);
+
+                    container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" : "mousewheel", function(e) {
+                        console.log('asdf');
+                        scroller.doMouseZoom(e.detail ? (e.detail * -120) : e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
+                    }, false);
+                }
+            });
+        }
+    };
+})
+.run(function($ionicPlatform, $rootScope) {
+    $rootScope.baseUrl = 'http://192.168.43.158';
+    //$rootScope.baseUrl = 'http://192.168.169.4';
+    //$rootScope.baseUrl = 'http://192.168.1.116';
+    //$rootScope.baseUrl = 'http://api.kajian.org';
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -32,42 +205,94 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: '/search',
+  .state('app.gambar', {
+    url: '/gambar',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html'
+        templateUrl: 'templates/gambar.html',
+        controller: 'GambarCtrl'
+      }
+    }
+  })
+  .state('app.gambardetail', {
+    url: '/gambar/:id',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/gambardetail.html',
+        controller: 'GambarDetailCtrl'
       }
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.videos', {
+      url: '/videos',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
-        }
-      }
-    })
-    .state('app.playlists', {
-      url: '/playlists',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
+          templateUrl: 'templates/videos.html',
+          controller: 'VideoCtrl'
         }
       }
     })
 
-  .state('app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+  .state('app.videosdetail', {
+      url: '/videos/:id',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/videodetail.html',
+          controller: 'VideoDetailCtrl'
+        }
       }
-    }
-  });
+    })
+    .state('app.audios', {
+      url: '/audios',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/audios.html',
+          controller: 'AudioCtrl'
+        }
+      }
+    })
+    .state('app.jadwal', {
+      url: '/jadwal',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/jadwal.html',
+          controller: 'JadwalCtrl'
+        }
+      }
+    })
+    .state('app.jadwaldetail', {
+      url: '/jadwal/:id',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/jadwaldetail.html',
+          controller: 'JadwalDetailCtrl'
+        }
+      }
+    })
+
+    .state('app.events', {
+      url: '/events',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/events.html',
+          controller: 'EventCtrl'
+        }
+      }
+    })
+    .state('app.eventdetail', {
+      url: '/events/:id',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/eventdetail.html',
+          controller: 'EventDetailCtrl'
+        }
+      }
+    })
+
+
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/gambar');
 });
+
+

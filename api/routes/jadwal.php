@@ -56,14 +56,19 @@ $app->get('/jadwal', function() use ($app) {
 $app->post('/jadwal',function() use ($app){
     $robots = $app->request->getJsonRawBody();
 
-    $phql = "INSERT INTO Jadwal (judul,deskripsi,gambar,tanggal,durasi,status) 
-        values(:judul:,:deskripsi:,:gambar:,:tanggal:,:durasi:,:status:)";
+    $phql = "INSERT INTO Jadwal (judul,deskripsi,gambar,tanggal,alamat,koordinat,durasi,status) 
+        values(:judul:,:deskripsi:,:gambar:,:tanggal:,:alamat:,:koordinat:,:durasi:,:status:)";
+
+    $date = DateTime::createFromFormat('d/m/Y',$robots->tanggal);
+    $tanggal = $date->format('Y-m-d');
 
     $status = $app->modelsManager->executeQuery($phql,array(
-        'judul'    => $robots->judul,
+        'judul'     => $robots->judul,
         'deskripsi' => $robots->deskripsi,
         'gambar'    => $robots->gambar,
-        'tanggal'   => $robots->tanggal,
+        'tanggal'   => $tanggal,
+        'alamat'    => $robots->alamat,
+        'koordinat' => $robots->koordinat,
         'durasi'    => $robots->durasi,
         'status'    => $robots->status,
 
@@ -104,13 +109,16 @@ $app->put('/jadwal',function() use ($app){
     $robots = $app->request->getJsonRawBody();
 
     $phql = "UPDATE Jadwal SET
-judul = :judul:,deskripsi = :deskripsi:,gambar = :gambar:,tanggal = :tanggal:,durasi = :durasi:, status = :status: where id_jadwal = :id_jadwal:";
-
+judul     = :judul:,deskripsi  = :deskripsi:,gambar = :gambar:,tanggal = :tanggal:,durasi = :durasi:, alamat = :alamat:, koordinat = :koordinat:, status = :status: where id_jadwal = :id_jadwal:";
+    $date = DateTime::createFromFormat('d/m/Y',$robots->tanggal);
+    $tanggal = $date->format('Y-m-d');
     $status = $app->modelsManager->executeQuery($phql,array(
         'judul'    => $robots->judul,
         'deskripsi' => $robots->deskripsi,
         'gambar'    => $robots->gambar,
-        'tanggal'   => $robots->tanggal,
+        'tanggal'   => $tanggal,
+        'alamat'    => $robots->alamat,
+        'koordinat' => $robots->koordinat,
         'durasi'    => $robots->durasi,
         'status'    => $robots->status,
         'id_jadwal' => $robots->id_jadwal

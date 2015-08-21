@@ -1,2 +1,2 @@
-mobile/node_modules
-mobile/bower_components
+mobile/*
+api/data/*

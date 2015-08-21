@@ -56,14 +56,18 @@ $app->get('/event', function() use ($app) {
 $app->post('/event',function() use ($app){
     $robots = $app->request->getJsonRawBody();
 
-    $phql = "INSERT INTO Event (judul,deskripsi,gambar,tanggal,status) 
-        values(:judul:,:deskripsi:,:gambar:,:tanggal:,:status:)";
+    $phql = "INSERT INTO Event (judul,deskripsi,gambar,tanggal,alamat,koordinat,status) 
+        values(:judul:,:deskripsi:,:gambar:,:tanggal:,:alamat:,:koordinat:,:status:)";
+    $date = DateTime::createFromFormat('d/m/Y',$robots->tanggal);
+    $tanggal = $date->format('Y-m-d');
 
     $status = $app->modelsManager->executeQuery($phql,array(
-        'judul'    => $robots->judul,
+        'judul'     => $robots->judul,
         'deskripsi' => $robots->deskripsi,
         'gambar'    => $robots->gambar,
-        'tanggal'   => $robots->tanggal,
+        'tanggal'   => $tanggal,
+        'alamat'    => $robots->alamat,
+        'koordinat' => $robots->koordinat,
         'status'    => $robots->status,
 
     ));
@@ -103,15 +107,19 @@ $app->put('/event',function() use ($app){
     $robots = $app->request->getJsonRawBody();
 
     $phql = "UPDATE Event SET
-judul = :judul:,deskripsi = :deskripsi:,gambar = :gambar:,tanggal = :tanggal:,status = :status: where id_event = :id_event:";
+judul     = :judul:,deskripsi = :deskripsi:,gambar = :gambar:,tanggal = :tanggal:,alamat = :alamat:, koordinat = :koordinat:, status = :status: where id_event = :id_event:";
 
+    $date = DateTime::createFromFormat('d/m/Y',$robots->tanggal);
+    $tanggal = $date->format('Y-m-d');
     $status = $app->modelsManager->executeQuery($phql,array(
-        'judul'    => $robots->judul,
+        'judul'     => $robots->judul,
         'deskripsi' => $robots->deskripsi,
         'gambar'    => $robots->gambar,
-        'tanggal'   => $robots->tanggal,
+        'tanggal'   => $tanggal,
+        'alamat'    => $robots->alamat,
+        'koordinat' => $robots->koordinat,
         'status'    => $robots->status,
-        'id_event' => $robots->id_event
+        'id_event'  => $robots->id_event
     ));
 
 

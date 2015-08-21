@@ -1,4 +1,5 @@
 <?php
+//error_reporting(0);
 
 use Phalcon\Loader;
 use Phalcon\Mvc\Micro;
@@ -20,7 +21,7 @@ $di->set('db', function(){
         "host"      => "localhost",
         "username"  => "root",
         "password"  => "root",
-        "dbname"    => "munawaroh"
+        "dbname"    => "phalconrest"
     ));
 });
 function _test($data){

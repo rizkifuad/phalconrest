@@ -26,6 +26,66 @@ $app->get('/content/{id}', function($id) use ($app) {
 
     return $response;
 });
+function getContent($robots){
+    //Create a response
+    $response = new Response();
+
+    $data = array();
+    foreach($robots as $robot){
+        array_push($data, $robot);
+    }
+
+    if ($data == false || count($data) == 0 ) {
+        $response->setJsonContent(array('status' => 'NOT-FOUND'));
+    } else {
+        $response->setJsonContent(array(
+            'status' => 'FOUND',
+            'data'   => $data
+        ));
+    }
+
+    return $response;
+
+}
+$app->get('/content/type/{type}', function($id) use ($app) {
+
+    $phql = "SELECT id_content,judul, type, body, c.deskripsi, c.id_kategori, kategori, body, id_user, status, uploadedAt FROM Content c 
+        INNER JOIN Kategori k ON c.id_kategori = k.id_kategori where type = :type:";
+    $robots = $app->modelsManager->executeQuery($phql, array(
+        'type' => $id
+    ));
+return getContent($robots);
+
+
+});
+$app->get('/content/kategori/{cat}', function($cat) use ($app) {
+
+    $phql = "SELECT id_content,judul, type, body, c.deskripsi, c.id_kategori, kategori, body, id_user, status, uploadedAt FROM Content c 
+        INNER JOIN Kategori k ON c.id_kategori = k.id_kategori where c.id_kategori = :cat:";
+    $robots = $app->modelsManager->executeQuery($phql, array(
+        'cat' => $cat
+    ));
+
+    //Create a response
+    $response = new Response();
+
+    $data = array();
+    foreach($robots as $robot){
+        array_push($data, $robot);
+    }
+
+    if ($data == false || count($data) == 0 ) {
+        $response->setJsonContent(array('status' => 'NOT-FOUND'));
+    } else {
+        $response->setJsonContent(array(
+            'status' => 'FOUND',
+            'data'   => $data
+        ));
+    }
+
+    return $response;
+
+});
 $app->get('/content', function() use ($app) {
 
     $phql = "SELECT id_content,judul, type, body, c.deskripsi, c.id_kategori, kategori, body, id_user, status, uploadedAt FROM Content c 
@@ -54,6 +114,16 @@ $app->get('/content', function() use ($app) {
 });
 
 
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
 $app->post('/content',function() use ($app){
     $robots = $app->request->getPost();
     $robots = json_decode($robots['data']);
@@ -65,8 +135,19 @@ $app->post('/content',function() use ($app){
     if($robots->type == 1){
         if ($app->request->hasFiles() == true) {
             foreach ($app->request->getUploadedFiles() as $file){
-                $file->moveTo('data/'.$file->getName());
-                $robots->body = $file->getName();
+                $filename = explode('.',$file->getName());
+                $ext = $filename[count($filename) - 1];
+                $string = generateRandomString();
+                mkdir('data/'.$string, 0777);
+
+
+                $fullimage = 'data/'.$string.'/'.$string.'.'.$ext;
+                $file->moveTo($fullimage);
+                $robots->body = $fullimage;
+
+                $image = new \Phalcon\Image\Adapter\GD($fullimage);
+                $image->resize(210, 140);
+                $image->save( 'data/'.$string.'/'.$string.'_thumb.'.$ext);
             }
 
         }
@@ -113,8 +194,28 @@ $app->post('/content',function() use ($app){
     return $response;
 });
 
-$app->put('/content',function() use ($app){
-    $robots = $app->request->getJsonRawBody();
+
+$app->post('/content/update',function() use ($app){
+    $robots = $app->request->getPost();
+    $robots = json_decode($robots['data']);
+    if ($app->request->hasFiles() == true) {
+        foreach ($app->request->getUploadedFiles() as $file){
+            $filename = explode('.',$file->getName());
+            $ext = $filename[count($filename) - 1];
+            $string = generateRandomString();
+            mkdir('data/'.$string, 0777);
+
+
+            $fullimage = 'data/'.$string.'/'.$string.'.'.$ext;
+            $file->moveTo($fullimage);
+            $robots->body = $fullimage;
+
+            $image = new \Phalcon\Image\Adapter\GD($fullimage);
+            $image->resize(210, 140);
+            $image->save( 'data/'.$string.'/'.$string.'_thumb.'.$ext);
+        }
+
+    }
 
     $phql = "UPDATE Content SET
 id_kategori = :id_kategori:,id_user = :id_user:,judul = :judul:, body = :body:,type = :type:,

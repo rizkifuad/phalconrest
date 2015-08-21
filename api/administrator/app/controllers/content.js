@@ -2,7 +2,7 @@ app.controller('contentController', ['$rootScope','$scope','$resource','$locatio
     function ($rootScope,$scope, $resource, $location,contentFactory,kategoriFactory,$routeParams) {
         clientId = '56a337509a8cc41e1aaf08c2439e9d14';
         $scope.baseurl = $rootScope.baseUrl;
-        $scope.imageurl = $scope.baseurl + "/data/";
+        $scope.imageurl = $scope.baseurl + "/";
         $scope.kategori_content = {};
         $scope.section = "view";
         function getContents() {
@@ -29,10 +29,10 @@ app.controller('contentController', ['$rootScope','$scope','$resource','$locatio
 
         getKategori();
         $scope.updateContent = function (content) {
-
-            contentFactory.updateContent(content)
+            contentFactory.updateContent(content, $scope.files)
             .success(function () {
                 $scope.status = 'Updated Customer! Refreshing customer list.';
+                getContents();
             })
             .error(function (error) {
                 $scope.status = 'Unable to update customer: ' + error.message;

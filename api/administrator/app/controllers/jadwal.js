@@ -13,7 +13,7 @@ function ($scope, $resource, $location,jadwalFactory) {
             console.log(data);
         })
         .error(function (error) {
-            $scope.status = 'Unable to load customer data: ' + error.message;
+            $scope.status = 'Unable to load customer data: ' + error.messages[0];
         });
     }
 
@@ -24,9 +24,12 @@ function ($scope, $resource, $location,jadwalFactory) {
         jadwalFactory.updateJadwal(jadwal)
         .success(function () {
             $scope.status = 'Updated Customer! Refreshing customer list.';
+            $scope.section = 'view';
         })
         .error(function (error) {
-            $scope.status = 'Unable to update customer: ' + error.message;
+            console.log(error);
+            $scope.status = 'Unable to update customer: ' + error.messages[0];
+            alert($scope.status);
         });
     };
 
@@ -35,9 +38,11 @@ function ($scope, $resource, $location,jadwalFactory) {
         .success(function () {
             $scope.status = 'Inserted Customer! Refreshing customer list.';
             getJadwals();
+            $scope.section = 'view';
         }).
             error(function(error) {
-            $scope.status = 'Unable to insert customer: ' + error.message;
+            $scope.status = 'Unable to insert customer: ' + error.messages[0];
+            alert($scope.status);
         });
     };
 
@@ -49,7 +54,8 @@ function ($scope, $resource, $location,jadwalFactory) {
             getJadwals();
         })
         .error(function (error) {
-            $scope.status = 'Unable to delete customer: ' + error.message;
+            $scope.status = 'Unable to delete customer: ' + error.message[0];
+            alert($scope.status);
         });
     };
     $scope.editJadwal = function(jadwal){
@@ -60,7 +66,8 @@ function ($scope, $resource, $location,jadwalFactory) {
     };
     $scope.getDate = function(datetime){
         return moment(datetime).format('DD/MM/YYYY');
-    }
+        //return datetime;
+    };
     $scope.addJadwal = function(){
         $scope.jadwal  = {};
         $scope.section = 'input';
@@ -73,13 +80,10 @@ function ($scope, $resource, $location,jadwalFactory) {
     $scope.processJadwal = function (jadwal){
         jadwal.gambar = "test";
         jadwal.status = 1;
-        jadwal.tanggal = moment(jadwal.tanggal,'DD/MM/YYYY').format('YYYY-MM-DD');
         if ($scope.section == "update") {
             $scope.updateJadwal(jadwal);
-            $scope.section = 'view';
         }else{
             $scope.insertJadwal(jadwal);
-            $scope.section = 'view';
         }
         
     };

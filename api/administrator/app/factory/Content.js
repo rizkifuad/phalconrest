@@ -56,8 +56,18 @@ angular.module('almunApp')
             
     };
 
-    contentFactory.updateContent = function (data) {
-        return $http.put(urlBase, data);
+    contentFactory.updateContent = function (data, files) {
+        console.log(files);
+        var file = null;
+        if(files && files.length){
+            file = files[0];
+            console.log(files);
+        }
+        return Upload.upload({
+            url: urlBase+'/update',
+            data: data,
+            file: file
+        });
     };
 
     contentFactory.deleteContent = function (id) {
