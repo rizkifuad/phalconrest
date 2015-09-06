@@ -1,3 +1,5 @@
 mobile/node_modules
 mobile/bower_components
 api/data/*
+api/public/*
+node_modules/*

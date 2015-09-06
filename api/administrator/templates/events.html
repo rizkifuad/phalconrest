@@ -90,9 +90,23 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Koordinat</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" placeholder="Koordinat Tempat" required ng-model="event.koordinat">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Koordinat Tempat" required ng-model="event.koordinat" id="koordinat">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success" type="button" ng-click="openMap(event)">Get Map</button>
+                                        </span>
+                                    </div><!-- /input-group -->
                                 </div>
                             </div>
+                            <input type="hidden" id="temp_koordinat">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Gambar</label>
+                                <div class="col-sm-10">
+                                    <div class="btn btn-primary" ngf-select ng-model="files">Upload file</div>
+                                    <br><span ng-if="files">Image thumbnail: <img ngf-src="files[0]" ngf-default-src="/thumb.jpg" ngf-accept="'image/*'" width="100"></span>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"></label>
                                 <div class="col-sm-10">
@@ -100,10 +114,34 @@
                                     <button id="reset" type="button" class="btn bg-navy" ng-click="doneEdit()">Cancel</button>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+</div>
+<div id="map-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Map</h4>
+            </div>
+            <div class="modal-body">
+                <script type="text/ng-template" id="searchbox.tpl.html">
+<input type="text" placeholder="Cari Lokasi" class="search-box form-control">
+                </script>
+                <ui-gmap-google-map center='map.center' control='map.control' zoom='map.zoom' events="map.events">
+                    <ui-gmap-search-box template="searchbox.template" events="searchbox.events"></ui-gmap-search-box>
+                    <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id" control="marker.control" dorebuildall="true">
+                    </ui-gmap-marker>
+                </ui-gmap-google-map>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="selectPlace()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>

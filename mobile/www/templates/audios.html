@@ -5,19 +5,12 @@
           on-refresh="doRefresh()">
       </ion-refresher>
       <div class="gambar_content">
-          
-<div class="card">
-  <div class="item item-divider" ng-repeat="c in contents">
-      <i class="icon ion-music-note"></i>
-      {{c.judul}}
-  </div>
-</div>
-      <div class="row content" ng-repeat="content in split_contents">
-          <div class="col col-33" ng-repeat="c in content">
-              <div class="img-content" style="background-image:url('{{urlBase}}/{{getThumb(c.body)}}');">
+          <div class="card">
+              <div class="item item-divider" ng-repeat="c in contents" ng-click="detail(c)">
+                  <i class="icon ion-music-note"></i>
+                  {{c.judul}}
               </div>
           </div>
-      </div>
       </div>
   </ion-content>
 </ion-view>

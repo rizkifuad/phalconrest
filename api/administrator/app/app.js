@@ -1,4 +1,4 @@
-var app = angular.module('almunApp', ['ngRoute','ngResource','ngFileUpload','youtube-embed'])
+var app = angular.module('almunApp', ['ngRoute','ngResource','ngFileUpload','youtube-embed', 'uiGmapgoogle-maps'])
 .config(['$routeProvider',
 function($routeProvider) {
     $routeProvider.
@@ -21,7 +21,14 @@ function($routeProvider) {
     otherwise({redirectTo: '/'});
 
 
-}]);
+}])
+.config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        //    key: 'your api key',
+        v: '3.20', //defaults to latest 3.X anyhow
+        libraries: 'weather,geometry,visualization,places'
+    });
+});
 app.run(function($rootScope) {
     $rootScope.baseUrl = 'http://api.kajian.org';
 });

@@ -79,7 +79,7 @@ angular.module('almunApp')
 }]);
 
 angular.module('almunApp')
-.factory('eventFactory', ['$http','$rootScope', function($http,$rootScope) {
+.factory('eventFactory', ['$http','$rootScope', 'Upload', function($http,$rootScope, Upload) {
 
     var urlBase = $rootScope.baseUrl + '/event';
     var eventFactory = {};
@@ -92,12 +92,34 @@ angular.module('almunApp')
         return $http.get(urlBase + '/' + id);
     };
 
-    eventFactory.insertEvent  = function (data) {
-        return $http.post(urlBase, data);
+
+    eventFactory.insertEvent  = function (data, files) {
+        console.log(data)
+        var file = null;
+        if(files && files.length){
+            file = files[0];
+            console.log(files);
+        }
+        return Upload.upload({
+            url: urlBase,
+            data: data,
+            file: file
+        });
+            
     };
 
-    eventFactory.updateEvent = function (data) {
-        return $http.put(urlBase + '/' , data);
+    eventFactory.updateEvent = function (data, files) {
+        console.log(files);
+        var file = null;
+        if(files && files.length){
+            file = files[0];
+            console.log(files);
+        }
+        return Upload.upload({
+            url: urlBase+'/update',
+            data: data,
+            file: file
+        });
     };
 
     eventFactory.deleteEvent = function (id) {
@@ -109,7 +131,7 @@ angular.module('almunApp')
 }]);
 
 angular.module('almunApp')
-.factory('jadwalFactory', ['$http','$rootScope', function($http,$rootScope) {
+.factory('jadwalFactory', ['$http','$rootScope','Upload', function($http,$rootScope, Upload) {
 
     var urlBase = $rootScope.baseUrl + '/jadwal';
     var jadwalFactory = {};
@@ -122,12 +144,33 @@ angular.module('almunApp')
         return $http.get(urlBase + '/' + id);
     };
 
-    jadwalFactory.insertJadwal  = function (data) {
-        return $http.post(urlBase, data);
+    jadwalFactory.insertJadwal  = function (data, files) {
+        console.log(data)
+        var file = null;
+        if(files && files.length){
+            file = files[0];
+            console.log(files);
+        }
+        return Upload.upload({
+            url: urlBase,
+            data: data,
+            file: file
+        });
+            
     };
 
-    jadwalFactory.updateJadwal = function (data) {
-        return $http.put(urlBase + '/' , data);
+    jadwalFactory.updateJadwal = function (data, files) {
+        console.log(files);
+        var file = null;
+        if(files && files.length){
+            file = files[0];
+            console.log(files);
+        }
+        return Upload.upload({
+            url: urlBase+'/update',
+            data: data,
+            file: file
+        });
     };
 
     jadwalFactory.deleteJadwal = function (id) {

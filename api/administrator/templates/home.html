@@ -27,7 +27,7 @@
                                 <th>Nama konten</th>
                                 <th>Action</th>
                             </tr>
-                            <tr ng-repeat="content in contents"  ng-click="showDetail(content)">
+                            <tr ng-repeat="content in contents | orderBy: '-uploadedAt'"  ng-click="showDetail(content)">
                                 <td>{{$index + 1}}</td>
                                 <td>{{content.judul}}</td>
                                 <td>

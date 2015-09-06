@@ -7700,25 +7700,29 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+.bar.bar-balanced {
+  background: #019946; }
+
 .menu-content {
   box-shadow: 1px 6px 9px 5px rgba(0, 0, 0, 0.5); }
 
 .sidemenu {
-  background: #444; }
+  background: #fff; }
 
 .sidemenu .item-complex .item-content, .sidemenu .item-divider {
-  background: #444;
-  color: #fff; }
+  background: #fff;
+  color: #444; }
 
 .sidemenu .item-divider {
-  background: #2f2f2f;
+  background: #019946;
+  color: #fff;
   text-align: center;
   min-height: .5em;
   padding: 5px;
   box-shadow: inset 0px 2px 1px rgba(255, 255, 255, 0.1); }
 
 .sidemenu .item {
-  border-color: #2f2f2f; }
+  border-color: #dadada; }
 
 .img-content, .video-content {
   width: 100%;
@@ -7765,13 +7769,16 @@ a.button {
 .img-detail {
   width: 100%; }
 
+.img-jadwal {
+  width: 100%; }
+
 @media only screen and (max-device-width: 375px) {
   .img-detail {
     margin-top: 35%; } }
 
 .button-bottom {
   position: absolute;
-  bottom: 0;
+  bottom: 0px;
   opacity: .7;
   width: 50%; }
 
@@ -7784,5 +7791,75 @@ a.button {
 
 .sidemenu .item-title {
   height: 45px;
+  background: #019946;
   line-height: 35px;
   box-shadow: none; }
+
+ng-sc-track {
+  width: 100%;
+  height: 320px;
+  display: inline-block;
+  position: relative;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); }
+
+ng-sc-track a, ng-sc-track a:hover, ng-sc-track a:link, ng-sc-track a:active {
+  color: #fff;
+  text-decoration: none; }
+
+ng-sc-track p, ng-sc-track h1 {
+  padding: 0;
+  margin: 0; }
+
+ng-sc-track h1 {
+  font-size: 2em;
+  font-weight: 100; }
+
+ng-sc-track p {
+  font-size: 0.75em; }
+
+ng-sc-track .album-art {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center; }
+
+ng-sc-track .wave {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.0; }
+
+ng-sc-track .details {
+  width: 100%;
+  height: 64px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff; }
+
+ng-sc-track .track-info {
+  float: left;
+  padding-left: 4px; }
+
+ng-sc-track .play {
+  float: right;
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
+  text-align: center;
+  font-size: 24px;
+  cursor: pointer;
+  background: #2cde50;
+  transition: all 0.3s ease 0s; }
+
+ng-sc-track .play:hover {
+  background: #6be784; }
+
+ng-sc-track .play:active {
+  background: #27c748;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5) inset; }
+
+.angular-google-map-container {
+  height: 100px; }

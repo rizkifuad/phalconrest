@@ -75,7 +75,6 @@ angular.module('almunApp.controllers', [])
         if(index % 3 == 0) return content; 
     };
     $scope.getid = function(content){
-        console.log($scope.contents.indexOf(content));
         return $scope.contents.indexOf(content);
     }
     $scope.items = [];
@@ -85,8 +84,11 @@ angular.module('almunApp.controllers', [])
     $scope.split_contents = [];
     $scope.urlBase = $rootScope.baseUrl;
     $scope.getThumb = function ( fullimg ){
-        full = fullimg.split('.');
-        return full[0] + '_thumb.' + full[1];
+        if(fullimg != null){
+            full = fullimg.split('.');
+            return full[0] + '_thumb.' + full[1];
+        }
+        return "";
     };
     $scope.detail = function ( id ){
         $location.path('app/gambar/'+id);
@@ -118,7 +120,18 @@ angular.module('almunApp.controllers', [])
     }
     getContents();
 })
-.controller('GambarDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $cordovaFileTransfer, $cordovaSocialSharing ) {
+.controller('GambarDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $cordovaFileTransfer, $cordovaSocialSharing, $ionicModal ) {
+    //socket.emit('push', 'menggila')
+    $scope.getUrl = function(url){
+        return $rootScope.baseUrl + "/"  + url;
+    }
+    $scope.shareR = function(content){
+        console.log(content)
+        imgurl = $rootScope.baseUrl + "/" + content.body;
+        //window.plugins.socialsharing.share(content.judul, imgurl, 'menggila');
+        window.plugins.socialsharing.share(content.judul, content.deskripsi,imgurl, content.judul)
+
+    }
     $scope.share = function(content){
         alert('mengila');
         $cordovaSocialSharing
@@ -164,6 +177,30 @@ angular.module('almunApp.controllers', [])
     }
     getContent($stateParams.id);
     $scope.urlBase= $rootScope.baseUrl;
+    $ionicModal.fromTemplateUrl('my-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    $scope.openModal = function() {
+        $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+        // Execute action
+    });
 })
 .controller('VideoCtrl', function($scope, $stateParams, contentFactory, $rootScope, $location) {
     $scope.detail = function ( id ){
@@ -202,20 +239,22 @@ angular.module('almunApp.controllers', [])
     }
     getContents();
 })
-.controller('VideoDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $location, $cordovaSocialSharing) {
+.controller('VideoDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $location, $cordovaSocialSharing, $rootScope) {
     clientId = '56a337509a8cc41e1aaf08c2439e9d14';
-
+    console.log($scope.urlBase)
     $scope.share = function(content){
-        alert('mengila');
-        $cordovaSocialSharing
-        .shareViaWhatsApp(content.deskripsi,null,' - ' + content.body)
-        .then(function(result) {
-            alert(JSON.stringify(result));
-            // Success!
-        }, function(err) {
-            alert(JSON.stringify(err));
-            // An error occurred. Show a message to the user
-        });
+        //alert('mengila');
+        //$cordovaSocialSharing
+        //.shareViaWhatsApp(content.deskripsi,null,' - ' + content.body)
+        //.then(function(result) {
+            //alert(JSON.stringify(result));
+            //// Success!
+        //}, function(err) {
+            //alert(JSON.stringify(err));
+            //// An error occurred. Show a message to the user
+        //});
+        deskripsi = content.deskripsi == null ? "" : " : " + content.deskripsi;
+        window.plugins.socialsharing.share(content.deskripsi, content.judul + deskripsi, null, content.body)
     };
     $scope.content = {};
     function getContent(id) {
@@ -227,13 +266,17 @@ angular.module('almunApp.controllers', [])
     getContent($stateParams.id);
     $scope.urlBase= $rootScope.baseUrl;
 })
-.controller('AudioCtrl', function($scope, $stateParams, contentFactory, $rootScope) {
+.controller('AudioCtrl', function($scope, $stateParams, contentFactory, $rootScope, $location) {
     $scope.contents = [];
     $scope.split_contents = [];
     $scope.urlBase = $rootScope.baseUrl;
     $scope.doRefresh = function() {
         getContents();
     };
+    $scope.detail = function ( content ){
+        console.log(content)
+        $location.path('app/audio/'+content.id_content+'/'+encodeURIComponent(content.body));
+    }
     $scope.getId = function ( str ){
         return str.split('v=')[1];
     }
@@ -252,15 +295,26 @@ angular.module('almunApp.controllers', [])
     }
     getContents();
 })
-.controller('AudioDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope) {
+.controller('AudioDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $cordovaSocialSharing) {
+
+    $scope.share = function(content){
+        console.log(content)
+        //window.plugins.socialsharing.share(content.judul, imgurl, 'menggila');
+        deskripsi = content.deskripsi == null ? "" : " : " + content.deskripsi;
+        window.plugins.socialsharing.share(content.deskripsi, content.judul + deskripsi, null, content.body)
+
+    }
     $scope.content = {};
-    function getContent() {
-        contentFactory.getContent()
+    function getContent(id) {
+        contentFactory.getContent(id)
         .success(function (data) {
-            $scope.content = data;
+            console.log($scope.player)
+            $scope.content = data.data;
+            console.log($scope.content.body)
         });
     }
-    getContent();
+    getContent($stateParams.id);
+    $scope.url = decodeURIComponent($stateParams.url)
 })
 .controller('JadwalCtrl', function($scope, $stateParams, jadwalFactory, $rootScope, $location) {
     $scope.detail = function ( id ){
@@ -288,18 +342,48 @@ angular.module('almunApp.controllers', [])
     }
     getJadwals();
 })
-.controller('JadwalDetailCtrl', function($scope, $stateParams, jadwalFactory, $rootScope) {
+.controller('JadwalDetailCtrl', function($scope, $stateParams, jadwalFactory, $rootScope, uiGmapGoogleMapApi) {
+    $scope.getDate = function(date){
+        return moment(date).format('DD MMMM YYYY')
+    }
+    $scope.urlBase = $rootScope.baseUrl;
     $scope.content = {};
     function getJadwal(id) {
         jadwalFactory.getContent(id)
         .success(function (data) {
             console.log(data);
             $scope.jadwal = data.data;
+            c = $scope.jadwal.koordinat.split(',')
+            if(c.length > 0){
+                console.log(c)
+                d = {
+                    latitude : c[0],
+                    longitude : c[1]
+                }
+                var default_loc = d
+                var default_zoom = 13
+                uiGmapGoogleMapApi.then(function(maps) {
+                    $scope.options = {scrollwheel: false};
+                    $scope.map = { 
+                        center: default_loc, 
+                        zoom: default_zoom, control : {},
+                    };
+                    $scope.marker = {
+                        id: 0,
+                        coords: {
+                            latitude: default_loc.latitude,
+                            longitude: default_loc.longitude
+                        },
+                        control : {},
+
+                    };
+                });
+            }
         });
     }
     getJadwal($stateParams.id);
 })
-.controller('EventCtrl', function($scope, $stateParams, eventFactory, $rootScope, $location) {
+.controller('EventCtrl', function($scope, $stateParams, eventFactory, $rootScope, $location, $cordovaLocalNotification) {
     $scope.detail = function ( id ){
         $location.path('app/events/'+id);
     }
@@ -322,13 +406,58 @@ angular.module('almunApp.controllers', [])
     }
     getEvents();
 })
-.controller('EventDetailCtrl', function($scope, $stateParams, eventFactory, $rootScope, $location) {
+.controller('EventDetailCtrl', function($scope, $stateParams, eventFactory, $rootScope, $location, $cordovaLocalNotification, $ionicPlatform, uiGmapGoogleMapApi) {
+    $scope.getDate = function(date){
+        return moment(date).format('DD MMMM YYYY')
+    }
+    $ionicPlatform.ready(function () {
+        $scope.scheduleSingleNotification = function () {
+            $cordovaLocalNotification.schedule({
+                id: 1,
+                title: 'Title here',
+                text: 'Text here',
+                data: {
+                    customProperty: 'custom value'
+                }
+            }).then(function (result) {
+                // ...
+            });
+        };
+        $scope.scheduleSingleNotification();
+    });
+    $scope.urlBase = $rootScope.baseUrl;
     $scope.content = {};
     function getEvent(id) {
         eventFactory.getContent(id)
         .success(function (data) {
             console.log(data);
             $scope.event = data.data;
+            c = $scope.event.koordinat.split(',')
+            if(c.length > 0){
+                console.log(c)
+                d = {
+                    latitude : c[0],
+                    longitude : c[1]
+                }
+                var default_loc = d
+                var default_zoom = 13
+                uiGmapGoogleMapApi.then(function(maps) {
+                    $scope.options = {scrollwheel: false};
+                    $scope.map = { 
+                        center: default_loc, 
+                        zoom: default_zoom, control : {},
+                    };
+                    $scope.marker = {
+                        id: 0,
+                        coords: {
+                            latitude: default_loc.latitude,
+                            longitude: default_loc.longitude
+                        },
+                        control : {},
+
+                    };
+                });
+            }
         });
     }
     getEvent($stateParams.id);

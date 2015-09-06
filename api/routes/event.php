@@ -54,7 +54,27 @@ $app->get('/event', function() use ($app) {
 
 
 $app->post('/event',function() use ($app){
-    $robots = $app->request->getJsonRawBody();
+    $robots = $app->request->getPost();
+    $robots = json_decode($robots['data']);
+    $robots->gambar = "";
+    if ($app->request->hasFiles() == true) {
+        foreach ($app->request->getUploadedFiles() as $file){
+            $filename = explode('.',$file->getName());
+            $ext = $filename[count($filename) - 1];
+            $string = generateRandomString();
+            mkdir('public/'.$string, 0777);
+
+
+            $fullimage = 'public/'.$string.'/'.$string.'.'.$ext;
+            $file->moveTo($fullimage);
+            $robots->gambar = $fullimage;
+
+            $image = new \Phalcon\Image\Adapter\GD($fullimage);
+            $image->resize(210, 140);
+            $image->save( 'public/'.$string.'/'.$string.'_thumb.'.$ext);
+        }
+
+    }
 
     $phql = "INSERT INTO Event (judul,deskripsi,gambar,tanggal,alamat,koordinat,status) 
         values(:judul:,:deskripsi:,:gambar:,:tanggal:,:alamat:,:koordinat:,:status:)";
@@ -103,8 +123,29 @@ $app->post('/event',function() use ($app){
     return $response;
 });
 
-$app->put('/event',function() use ($app){
+$app->post('/event/update',function() use ($app){
     $robots = $app->request->getJsonRawBody();
+
+    $robots = $app->request->getPost();
+    $robots = json_decode($robots['data']);
+    if ($app->request->hasFiles() == true) {
+        foreach ($app->request->getUploadedFiles() as $file){
+            $filename = explode('.',$file->getName());
+            $ext = $filename[count($filename) - 1];
+            $string = generateRandomString();
+            mkdir('public/'.$string, 0777);
+
+
+            $fullimage = 'public/'.$string.'/'.$string.'.'.$ext;
+            $file->moveTo($fullimage);
+            $robots->gambar = $fullimage;
+
+            $image = new \Phalcon\Image\Adapter\GD($fullimage);
+            $image->resize(210, 140);
+            $image->save( 'public/'.$string.'/'.$string.'_thumb.'.$ext);
+        }
+
+    }
 
     $phql = "UPDATE Event SET
 judul     = :judul:,deskripsi = :deskripsi:,gambar = :gambar:,tanggal = :tanggal:,alamat = :alamat:, koordinat = :koordinat:, status = :status: where id_event = :id_event:";

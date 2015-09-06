@@ -109,3 +109,14 @@ ng-sc-track .play:active {
   background: #27c748;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5) inset;
 }
+.angular-google-map-container { height: 400px; }
+.search-box{
+    z-index: 0;
+    position: absolute;
+    left: 271px;
+    top: 10px;
+    width: 300px;
+    box-shadow: 0px 0px 12px rgba(33,233,233,1);
+margin-top: 10px;
+    margin-left: 200px;
+}

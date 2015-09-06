@@ -54,7 +54,27 @@ $app->get('/jadwal', function() use ($app) {
 
 
 $app->post('/jadwal',function() use ($app){
-    $robots = $app->request->getJsonRawBody();
+    $robots = $app->request->getPost();
+    $robots = json_decode($robots['data']);
+    $robots->gambar = "";
+    if ($app->request->hasFiles() == true) {
+        foreach ($app->request->getUploadedFiles() as $file){
+            $filename = explode('.',$file->getName());
+            $ext = $filename[count($filename) - 1];
+            $string = generateRandomString();
+            mkdir('public/'.$string, 0777);
+
+
+            $fullimage = 'public/'.$string.'/'.$string.'.'.$ext;
+            $file->moveTo($fullimage);
+            $robots->gambar = $fullimage;
+
+            $image = new \Phalcon\Image\Adapter\GD($fullimage);
+            $image->resize(210, 140);
+            $image->save( 'public/'.$string.'/'.$string.'_thumb.'.$ext);
+        }
+
+    }
 
     $phql = "INSERT INTO Jadwal (judul,deskripsi,gambar,tanggal,alamat,koordinat,durasi,status) 
         values(:judul:,:deskripsi:,:gambar:,:tanggal:,:alamat:,:koordinat:,:durasi:,:status:)";
@@ -105,9 +125,29 @@ $app->post('/jadwal',function() use ($app){
     return $response;
 });
 
-$app->put('/jadwal',function() use ($app){
+$app->post('/jadwal/update',function() use ($app){
     $robots = $app->request->getJsonRawBody();
 
+    $robots = $app->request->getPost();
+    $robots = json_decode($robots['data']);
+    if ($app->request->hasFiles() == true) {
+        foreach ($app->request->getUploadedFiles() as $file){
+            $filename = explode('.',$file->getName());
+            $ext = $filename[count($filename) - 1];
+            $string = generateRandomString();
+            mkdir('public/'.$string, 0777);
+
+
+            $fullimage = 'public/'.$string.'/'.$string.'.'.$ext;
+            $file->moveTo($fullimage);
+            $robots->gambar = $fullimage;
+
+            $image = new \Phalcon\Image\Adapter\GD($fullimage);
+            $image->resize(210, 140);
+            $image->save( 'public/'.$string.'/'.$string.'_thumb.'.$ext);
+        }
+
+    }
     $phql = "UPDATE Jadwal SET
 judul     = :judul:,deskripsi  = :deskripsi:,gambar = :gambar:,tanggal = :tanggal:,durasi = :durasi:, alamat = :alamat:, koordinat = :koordinat:, status = :status: where id_jadwal = :id_jadwal:";
     $date = DateTime::createFromFormat('d/m/Y',$robots->tanggal);

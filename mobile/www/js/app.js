@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('almunApp', ['ionic','ionicLazyLoad', 'almunApp.controllers','ngCordova','youtube-embed'])
+angular.module('almunApp', ['ionic','ionicLazyLoad', 'almunApp.controllers','ngCordova','youtube-embed','uiGmapgoogle-maps'])
 .service('ScrollRender', function() {
     this.render = function(content) {
         return (function(global) {
@@ -176,10 +176,11 @@ angular.module('almunApp', ['ionic','ionicLazyLoad', 'almunApp.controllers','ngC
     };
 })
 .run(function($ionicPlatform, $rootScope) {
-    $rootScope.baseUrl = 'http://192.168.43.158';
+    //$rootScope.baseUrl = 'http://192.168.43.158';
     //$rootScope.baseUrl = 'http://192.168.169.4';
-    //$rootScope.baseUrl = 'http://192.168.1.116';
+    $rootScope.baseUrl = 'http://192.168.1.131';
     //$rootScope.baseUrl = 'http://api.kajian.org';
+    //$rootScope.baseUrl = 'http://128.199.132.72';
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -244,11 +245,20 @@ angular.module('almunApp', ['ionic','ionicLazyLoad', 'almunApp.controllers','ngC
       }
     })
     .state('app.audios', {
-      url: '/audios',
+      url: '/audio',
       views: {
         'menuContent': {
           templateUrl: 'templates/audios.html',
           controller: 'AudioCtrl'
+        }
+      }
+    })
+    .state('app.audiosdetail', {
+      url: '/audio/:id/:url',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/audiodetail.html',
+          controller: 'AudioDetailCtrl'
         }
       }
     })
@@ -293,6 +303,92 @@ angular.module('almunApp', ['ionic','ionicLazyLoad', 'almunApp.controllers','ngC
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/gambar');
-});
+})
 
+.config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        //    key: 'your api key',
+        v: '3.20', //defaults to latest 3.X anyhow
+        libraries: 'weather,geometry,visualization,places'
+    });
+})
+.directive('ngScTrack', ['$http','$rootScope',
+    function($http, $rootScope) {
+        function link(scope) {
+            var clientid = '56a337509a8cc41e1aaf08c2439e9d14';
+            $http({
+                method : 'GET',
+                url : 'https://api.soundcloud.com/resolve.json?url='+scope.track+'&client_id='+clientid
+            }).
+            success(function(data){
+                console.log(data);
+                playTrack(data.id);
 
+            });
+            $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) { 
+
+                scope.song.pause();
+            });
+            var playTrack = function(id){
+                $http({
+                    method: 'GET',
+                    url: 'http://api.soundcloud.com/tracks/' + id + '.json?client_id=' + clientid
+                }).
+                    success(function(data) {
+                    scope.band = data.user.username;
+                    scope.bandUrl = data.user.permalink_url;
+                    scope.title = data.title;
+                    scope.trackUrl = data.permalink_url;
+                    scope.albumArt = data.artwork_url.replace("large", "t500x500");
+                    scope.wave = data.waveform_url;
+                    scope.stream = data.stream_url + '?client_id=' + clientid;
+                    scope.song = new Audio();
+                });
+                scope.playing = false;
+                scope.play = function() {
+                    scope.playing = !scope.playing;
+                    if (!scope.playing) {
+                        scope.song.pause();
+                    } else {
+                        if (scope.song.src == '') {
+                            scope.song.src = scope.stream;
+                        }
+                        scope.song.play();
+                    }
+                }
+            }
+        }
+        return {
+            restrict: 'E',
+            scope: {
+                track: '=track',
+            },
+            templateUrl: "./templates/ng-sc-track.html",
+            link: link
+        };
+    }
+])
+
+//.factory('socket', function ($rootScope) {
+    //var socket = io.connect('http://192.168.1.131:3000');
+    //return {
+        //on: function (eventName, callback) {
+            //socket.on(eventName, function () {  
+                //var args = arguments;
+                //$rootScope.$apply(function () {
+                    //callback.apply(socket, args);
+                //});
+            //});
+        //},
+        //emit: function (eventName, data, callback) {
+            //socket.emit(eventName, data, function () {
+                //var args = arguments;
+                //$rootScope.$apply(function () {
+                    //if (callback) {
+                        //callback.apply(socket, args);
+                    //}
+                //});
+            //});
+        //}
+    //};
+//});

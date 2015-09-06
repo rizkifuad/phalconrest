@@ -2,13 +2,22 @@
   <ion-content>
       <div class="gambar_content">
             <div class="card">
+                <div class="item item-text-wrap" ng-if="jadwal.koordinat">
+                    <ui-gmap-google-map center='map.center' control='map.control' zoom='map.zoom' events="map.events">
+                        <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id" control="marker.control" dorebuildall="true">
+                        </ui-gmap-marker>
+                    </ui-gmap-google-map>
+                </div>
                 <div class="item item-text-wrap">
                     <i class="icon ion-calendar"></i>
-                    {{jadwal.tanggal}}
+                    {{getDate(jadwal.tanggal)}}
                 </div>
                 <div class="item item-divider">
                     <i class="icon ion-calendar"></i>
                     {{jadwal.judul}}
+                </div>
+                <div class="item item-text-wrap" ng-if="jadwal.gambar">
+                    <img image-lazy-src="{{urlBase}}/{{jadwal.gambar}}" class="img-jadwal" zoomable id="image-scrollable">
                 </div>
                 <div class="item item-text-wrap">
                     {{jadwal.deskripsi}}
