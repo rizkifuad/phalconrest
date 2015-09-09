@@ -7811,8 +7811,12 @@ ng-sc-track p, ng-sc-track h1 {
   margin: 0; }
 
 ng-sc-track h1 {
-  font-size: 2em;
-  font-weight: 100; }
+  font-size: 1.5em;
+  width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 100;
+  overflow: hidden; }
 
 ng-sc-track p {
   font-size: 0.75em; }
@@ -7831,7 +7835,8 @@ ng-sc-track .wave {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.0; }
+  background-color: #019946;
+  opacity: 1.0; }
 
 ng-sc-track .details {
   width: 100%;
@@ -7862,4 +7867,4 @@ ng-sc-track .play:active {
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5) inset; }
 
 .angular-google-map-container {
-  height: 100px; }
+  height: 400px; }

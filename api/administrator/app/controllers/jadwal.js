@@ -1,7 +1,7 @@
 app.controller('jadwalController', ['$scope','$resource','$location','jadwalFactory','uiGmapGoogleMapApi',
 function ($scope, $resource, $location,jadwalFactory, uiGmapGoogleMapApi) {
-    $('.date').datepicker({
-        format         : "dd/mm/yyyy",
+    $('.date').datetimepicker({
+        format         : "d/m/Y H:i",
         autoclose      : true,
         todayHighlight : true,
     });
@@ -65,13 +65,13 @@ function ($scope, $resource, $location,jadwalFactory, uiGmapGoogleMapApi) {
     $scope.editJadwal = function(jadwal){
         cur_jadwal = jadwal;
         $scope.jadwal = jadwal;
-        $scope.jadwal.tanggal = moment($scope.jadwal.tanggal).format('DD/MM/YYYY');
+        $scope.jadwal.tanggal = moment($scope.jadwal.tanggal).format('DD/MM/YYYY HH:mm');
         $scope.section = 'update';
         $scope.files = null;
         console.log(cur_jadwal)
     };
     $scope.getDate = function(datetime){
-        return moment(datetime).format('DD/MM/YYYY');
+        return moment(datetime).format('DD/MM/YYYY HH:mm');
         //return datetime;
     };
     $scope.addJadwal = function(){

@@ -1,10 +1,9 @@
-<div class="album-art" ng-style="{'background-image': 'url('+albumArt+')'}"></div>
+<div class="album-art" ng-if="albumArt" ng-style="{'background-image': 'url('+albumArt+')'}"></div>
 <div class="wave" ng-style="{'background-image': 'url('+wave+')'}"></div>
 <div class="details" style="position: absolute; bottom: 0;">
 	<div class="track-info">
-		<a ng-href="{{trackUrl}}"><h3>{{title}}</h3></a>
+		<a ng-href="{{trackUrl}}"><h1>{{title}}</h1></a>
 		<a ng-href="{{bandUrl}}"><p>{{band}}</p></a>
 	</div>
 	<a class="play" ng-click="play()" ng-class="{'glyphicon glyphicon-play': !playing, 'glyphicon glyphicon-pause': playing}"></a>
 </div>
-

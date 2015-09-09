@@ -1,7 +1,7 @@
 app.controller('eventController', ['$scope','$resource','$location','eventFactory','uiGmapGoogleMapApi',
 function ($scope, $resource, $location,eventFactory,uiGmapGoogleMapApi) {
-    $('.date').datepicker({
-        format         : "dd/mm/yyyy",
+    $('.date').datetimepicker({
+        format         : "d/m/Y H:i",
         autoclose      : true,
         todayHighlight : true,
     });
@@ -63,13 +63,13 @@ function ($scope, $resource, $location,eventFactory,uiGmapGoogleMapApi) {
     };
     $scope.editEvent = function(event){
         $scope.event = event;
-        $scope.event.tanggal = moment($scope.event.tanggal).format('DD/MM/YYYY');
+        $scope.event.tanggal = moment($scope.event.tanggal).format('DD/MM/YYYY HH:mm');
         $scope.section = 'update';
         $scope.files = null;
 
     };
     $scope.getDate = function(datetime){
-        return moment(datetime).format('DD/MM/YYYY');
+        return moment(datetime).format('DD/MM/YYYY HH:mm');
     }
     $scope.addEvent = function(){
         $scope.event  = {};

@@ -346,6 +346,9 @@ angular.module('almunApp.controllers', [])
     $scope.getDate = function(date){
         return moment(date).format('DD MMMM YYYY')
     }
+    $scope.getTime = function(date){
+        return moment(date).format('HH:mm')
+    }
     $scope.urlBase = $rootScope.baseUrl;
     $scope.content = {};
     function getJadwal(id) {
@@ -409,6 +412,9 @@ angular.module('almunApp.controllers', [])
 .controller('EventDetailCtrl', function($scope, $stateParams, eventFactory, $rootScope, $location, $cordovaLocalNotification, $ionicPlatform, uiGmapGoogleMapApi) {
     $scope.getDate = function(date){
         return moment(date).format('DD MMMM YYYY')
+    }
+    $scope.getTime = function(date){
+        return moment(date).format('HH:mm')
     }
     $ionicPlatform.ready(function () {
         $scope.scheduleSingleNotification = function () {

@@ -89,7 +89,8 @@ app.directive('ngScTrack', ['$http',
                     scope.bandUrl = data.user.permalink_url;
                     scope.title = data.title;
                     scope.trackUrl = data.permalink_url;
-                    scope.albumArt = data.artwork_url.replace("large", "t500x500");
+                    if(scope.albumArt)
+                        scope.albumArt = data.artwork_url.replace("large", "t500x500");
                     scope.wave = data.waveform_url;
                     scope.stream = data.stream_url + '?client_id=' + clientid;
                     scope.song = new Audio();
