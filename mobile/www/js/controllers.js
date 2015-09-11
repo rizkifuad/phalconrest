@@ -120,7 +120,8 @@ angular.module('almunApp.controllers', [])
     }
     getContents();
 })
-.controller('GambarDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $cordovaFileTransfer, $cordovaSocialSharing, $ionicModal ) {
+.controller('GambarDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $cordovaFileTransfer, $cordovaSocialSharing, $ionicModal, $ionicPopup, $timeout ) {
+    $scope.urlBase= $rootScope.baseUrl;
     //socket.emit('push', 'menggila')
     $scope.getUrl = function(url){
         return $rootScope.baseUrl + "/"  + url;
@@ -132,21 +133,31 @@ angular.module('almunApp.controllers', [])
         window.plugins.socialsharing.share(content.judul, content.deskripsi,imgurl, content.judul)
 
     }
+    $scope.showAlert = function(title, msg) {
+        var alertPopup = $ionicPopup.alert({
+            title: title,
+            template: msg,
+            buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
+                text: 'Ok',
+                type: 'button-balanced',
+            }]
+        })
+    }
     $scope.share = function(content){
-        alert('mengila');
+        //alert('mengila');
         $cordovaSocialSharing
         .shareViaWhatsApp(content.deskripsi,$rootScope.baseUrl + "/"  + content.body,' - ' + content.deskripsi)
         .then(function(result) {
-            alert(JSON.stringify(result));
             // Success!
         }, function(err) {
-            alert(JSON.stringify(err));
+            // Success!
+            //alert(JSON.stringify(err));
             // An error occurred. Show a message to the user
         });
     };
-  $scope.downloadFile = function(img) {
+    $scope.downloadFile = function(img) {
     var url = $scope.urlBase + "/" + img;
-    alert(url);
+    //alert(url);
     var filename = url.split("/").pop();
     //alert(filename);
     var targetPath = cordova.file.externalRootDirectory + 'al-munawarrah/'+ filename;
@@ -157,10 +168,12 @@ angular.module('almunApp.controllers', [])
     //alert("are we done");
     $cordovaFileTransfer.download(url, targetPath, options, trustHosts)
     .then(function(result) {
+        $scope.showAlert('', 'Simpan berhasil!');
         // Success!
-        alert(JSON.stringify(result));
+        //alert(JSON.stringify(result));
     }, function(error) {
-        alert(JSON.stringify(error));
+        $scope.showAlert('Error', 'Simpan gagal!');
+        //alert(JSON.stringify(error));
         // Error
     }, function (progress) {
         $timeout(function () {
@@ -168,7 +181,10 @@ angular.module('almunApp.controllers', [])
         })
     });
   }
-    $scope.content = {};
+  $scope.refresh = function(){
+    getContent($stateParams.id);
+  }
+  $scope.content = {};
     function getContent(id) {
         contentFactory.getContent(id)
         .success(function (data) {
@@ -176,31 +192,6 @@ angular.module('almunApp.controllers', [])
         });
     }
     getContent($stateParams.id);
-    $scope.urlBase= $rootScope.baseUrl;
-    $ionicModal.fromTemplateUrl('my-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(modal) {
-        $scope.modal = modal;
-    });
-    $scope.openModal = function() {
-        $scope.modal.show();
-    };
-    $scope.closeModal = function() {
-        $scope.modal.hide();
-    };
-    //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function() {
-        $scope.modal.remove();
-    });
-    // Execute action on hide modal
-    $scope.$on('modal.hidden', function() {
-        // Execute action
-    });
-    // Execute action on remove modal
-    $scope.$on('modal.removed', function() {
-        // Execute action
-    });
 })
 .controller('VideoCtrl', function($scope, $stateParams, contentFactory, $rootScope, $location) {
     $scope.detail = function ( id ){

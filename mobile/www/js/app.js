@@ -178,9 +178,9 @@ angular.module('almunApp', ['ionic','ionicLazyLoad', 'almunApp.controllers','ngC
 .run(function($ionicPlatform, $rootScope) {
     //$rootScope.baseUrl = 'http://192.168.43.158';
     //$rootScope.baseUrl = 'http://192.168.169.4';
-    $rootScope.baseUrl = 'http://192.168.1.131';
+    //$rootScope.baseUrl = 'http://192.168.1.131';
     //$rootScope.baseUrl = 'http://api.kajian.org';
-    //$rootScope.baseUrl = 'http://128.199.132.72';
+    $rootScope.baseUrl = 'http://128.199.132.72';
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)

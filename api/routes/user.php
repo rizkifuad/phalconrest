@@ -2,31 +2,25 @@
 use Phalcon\Http\Response;
 
 //Retrieves robots based on primary key
-$app->get('/users/find/{name}', function($name) use ($app) {
-
-    $phql = "SELECT * FROM User WHERE username = :name:";
+$app->post('/users/auth', function() use ($app) {
+    $robots = $app->request->getPost();
+    $phql = "SELECT * FROM User WHERE username = :username: and password = :password:";
     $users = $app->modelsManager->executeQuery($phql, array(
-        'name' => $name
+        'username' => $robots['username'],
+        'password' => $robots['password']
     ));
 
-    $data = array();
-    foreach($users as $user){
-        $data[] =  array(
-            'name' => $user->username
-        );
+    $data = false;
+    if(count($users) == 1){
+        $data = true;
     }
 
     //Create a response
     $response = new Response();
 
-    if ($data == false) {
-        $response->setJsonContent(array('status' => 'NOT-FOUND'));
-    } else {
-        $response->setJsonContent(array(
-            'status' => 'FOUND',
-            'data'   => $data
+    $response->setJsonContent(array(
+        'status'   => $data
         ));
-    }
 
     return $response;
 });
@@ -45,3 +39,4 @@ $app->post('/users/register',function() use ($app){
         'status'    => $user->status
     ));
 });
+
