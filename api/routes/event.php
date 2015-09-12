@@ -78,7 +78,6 @@ $app->post('/event',function() use ($app){
 
     $phql = "INSERT INTO Event (judul,deskripsi,gambar,tanggal,alamat,koordinat,status) 
         values(:judul:,:deskripsi:,:gambar:,:tanggal:,:alamat:,:koordinat:,:status:)";
-echo $robots->tanggal;
     $date = DateTime::createFromFormat('d/m/Y H:i',$robots->tanggal);
     $tanggal = $date->format('Y-m-d H:i');
 
