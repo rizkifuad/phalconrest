@@ -139,7 +139,7 @@ angular.module('almunApp.controllers', [])
             template: msg,
             buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
                 text: 'Ok',
-                type: 'button-balanced',
+            type: 'button-balanced',
             }]
         })
     }
@@ -156,35 +156,36 @@ angular.module('almunApp.controllers', [])
         });
     };
     $scope.downloadFile = function(img) {
-    var url = $scope.urlBase + "/" + img;
-    //alert(url);
-    var filename = url.split("/").pop();
-    //alert(filename);
-    var targetPath = cordova.file.externalRootDirectory + 'al-munawarrah/'+ filename;
-    var trustHosts = true
-    var options = {};
-    //alert(cordova.file.externalRootDirectory);
-    //alert(JSON.stringify(cordova.file));
-    //alert("are we done");
-    $cordovaFileTransfer.download(url, targetPath, options, trustHosts)
-    .then(function(result) {
-        $scope.showAlert('', 'Simpan berhasil!');
-        // Success!
-        //alert(JSON.stringify(result));
-    }, function(error) {
-        $scope.showAlert('Error', 'Simpan gagal!');
-        //alert(JSON.stringify(error));
-        // Error
-    }, function (progress) {
-        $timeout(function () {
-            $scope.downloadProgress = (progress.loaded / progress.total) * 100;
-        })
-    });
-  }
-  $scope.refresh = function(){
-    getContent($stateParams.id);
-  }
-  $scope.content = {};
+        var url = $scope.urlBase + "/" + img;
+        //alert(url);
+        var filename = url.split("/").pop();
+        //alert(filename);
+        var targetPath = cordova.file.externalRootDirectory + 'al-munawarrah/'+ filename;
+        var trustHosts = true
+        var options = {};
+        //alert(cordova.file.externalRootDirectory);
+        //alert(JSON.stringify(cordova.file));
+        //alert("are we done");
+        $cordovaFileTransfer.download(url, targetPath, options, trustHosts)
+        .then(function(result) {
+            $scope.showAlert('', 'Simpan berhasil!');
+            // Success!
+            //alert(JSON.stringify(result));
+        }, function(error) {
+            $scope.showAlert('Error', 'Simpan gagal!');
+            //alert(JSON.stringify(error));
+            // Error
+        }, function (progress) {
+            $timeout(function () {
+                $scope.downloadProgress = (progress.loaded / progress.total) * 100;
+            })
+        });
+    }
+    $scope.refresh = function(){
+        console.log('menggila')
+        getContent($stateParams.id);
+    }
+    $scope.content = {};
     function getContent(id) {
         contentFactory.getContent(id)
         .success(function (data) {
@@ -230,9 +231,38 @@ angular.module('almunApp.controllers', [])
     }
     getContents();
 })
-.controller('VideoDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $location, $cordovaSocialSharing, $rootScope) {
+.controller('VideoDetailCtrl', function($scope, $stateParams, contentFactory, $rootScope, $location, $cordovaSocialSharing, $rootScope, $ionicNavBarDelegate, $ionicPlatform) {
     clientId = '56a337509a8cc41e1aaf08c2439e9d14';
     console.log($scope.urlBase)
+    var orientation = 1;
+    var deregister = $ionicPlatform.onHardwareBackButton(function(event) {
+    });
+    $ionicPlatform.onHardwareBackButton(function(event) {
+        if(orientation == 1){
+            $ionicNavBarDelegate.back()
+        }else{
+            screen.lockOrientation('portrait')
+            orientation = 1;
+            $ionicNavBarDelegate.showBar(true); 
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    });
+    $scope.$on('$destroy',deregister)
+    $scope.rotate = function(){
+
+        if(orientation == 1){
+            $ionicNavBarDelegate.showBar(false); 
+            orientation = 2
+            screen.lockOrientation('landscape')
+
+        }
+        else{
+            orientation = 1;
+            screen.lockOrientation('portrait')
+        }
+    }
     $scope.share = function(content){
         //alert('mengila');
         //$cordovaSocialSharing

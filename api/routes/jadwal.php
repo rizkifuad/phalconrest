@@ -79,8 +79,8 @@ $app->post('/jadwal',function() use ($app){
     $phql = "INSERT INTO Jadwal (judul,deskripsi,gambar,tanggal,alamat,koordinat,durasi,status) 
         values(:judul:,:deskripsi:,:gambar:,:tanggal:,:alamat:,:koordinat:,:durasi:,:status:)";
 
-    $date = DateTime::createFromFormat('d/m/Y h:i',$robots->tanggal);
-    $tanggal = $date->format('Y-m-d h:i');
+    $date = DateTime::createFromFormat('d/m/Y H:i',$robots->tanggal);
+    $tanggal = $date->format('Y-m-d H:i');
 
     $status = $app->modelsManager->executeQuery($phql,array(
         'judul'     => $robots->judul,

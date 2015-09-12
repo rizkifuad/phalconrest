@@ -78,8 +78,9 @@ $app->post('/event',function() use ($app){
 
     $phql = "INSERT INTO Event (judul,deskripsi,gambar,tanggal,alamat,koordinat,status) 
         values(:judul:,:deskripsi:,:gambar:,:tanggal:,:alamat:,:koordinat:,:status:)";
-    $date = DateTime::createFromFormat('d/m/Y h:i',$robots->tanggal);
-    $tanggal = $date->format('Y-m-d h:i');
+echo $robots->tanggal;
+    $date = DateTime::createFromFormat('d/m/Y H:i',$robots->tanggal);
+    $tanggal = $date->format('Y-m-d H:i');
 
     $status = $app->modelsManager->executeQuery($phql,array(
         'judul'     => $robots->judul,
@@ -150,8 +151,8 @@ $app->post('/event/update',function() use ($app){
     $phql = "UPDATE Event SET
 judul     = :judul:,deskripsi = :deskripsi:,gambar = :gambar:,tanggal = :tanggal:,alamat = :alamat:, koordinat = :koordinat:, status = :status: where id_event = :id_event:";
 
-    $date = DateTime::createFromFormat('d/m/Y h:i',$robots->tanggal);
-    $tanggal = $date->format('Y-m-d h:i');
+    $date = DateTime::createFromFormat('d/m/Y H:i',$robots->tanggal);
+    $tanggal = $date->format('Y-m-d H:i');
     $status = $app->modelsManager->executeQuery($phql,array(
         'judul'     => $robots->judul,
         'deskripsi' => $robots->deskripsi,

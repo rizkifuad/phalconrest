@@ -50,7 +50,7 @@ function getContent($robots){
 $app->get('/content/type/{type}', function($id) use ($app) {
 
     $phql = "SELECT id_content,judul, type, body, c.deskripsi, c.id_kategori, kategori, body, id_user, status, uploadedAt FROM Content c 
-        INNER JOIN Kategori k ON c.id_kategori = k.id_kategori where type = :type:";
+        INNER JOIN Kategori k ON c.id_kategori = k.id_kategori where type = :type: order by uploadedAt";
     $robots = $app->modelsManager->executeQuery($phql, array(
         'type' => $id
     ));
