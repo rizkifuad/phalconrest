@@ -38,6 +38,9 @@ angular.module('almunApp')
         return $http.get(urlBase + '/type/' + type);
     };
 
+    contentFactory.getPlaylistThumb = function(playlistid) {
+        return $http.get('https://www.googleapis.com/youtube/v3/playlists?part=snippet&id='+ playlistid +'&key=AIzaSyCGfuOlUcxcXunlzORGwAbLtg1RmtLv1Os')
+    }
     contentFactory.getContent = function (id) {
         return $http.get(urlBase + '/' + id);
     };

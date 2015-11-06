@@ -69,10 +69,81 @@ angular.module('almunApp.controllers', [])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('GambarCtrl', function($scope, $location, $stateParams, contentFactory, $rootScope) {
+.controller('GambarCtrl', function($scope, $location, $stateParams, contentFactory, $rootScope, kategoriFactory, $ionicPopover) {
+    $scope.kategori = {};
+    var getKategori = function(){
+        kategoriFactory.getKategori()
+        .success(function(data) {
+            $scope.kategori = data.data;
+            console.log($scope.kategori)
+        })
+    }
+    getKategori();
+    $scope.currentKategori = 0;
+    $scope.changeKategori = function(a, b) {
+        console.log(a)
+        $scope.currentKategori = a;
+        if(a == 0){
+            $scope.contents = $scope.fullcontents;
+        }else{
+            $scope.contents = $scope.fullcontents;
+            var c = [];
+            for (var i = 0, len = $scope.contents.length; i < len; i++) {
+                if($scope.contents[i].id_kategori == a){
+                    console.log('ada')
+                    c.push($scope.contents[i])
+                }
+            }
+            $scope.contents = c;
+            b = ' - ' + b;
+        }
+            var title = document.getElementsByClassName('title')
+            console.log(title.length)
+            title[1].innerHTML = 'Gambar' + b;
+
+        $scope.closePopover();
+
+    }
+
+    console.log($scope.kategori);
+ var template = '<ion-popover-view><ion-header-bar> <h1 class="title">My Popover Title</h1> </ion-header-bar> <ion-content> Hello! </ion-content></ion-popover-view>';
+    $scope.popover = $ionicPopover.fromTemplate(template, {
+        scope: $scope
+    });
+
+    // .fromTemplateUrl() method
+    $ionicPopover.fromTemplateUrl('my-popover.html', {
+        scope: $scope
+    }).then(function(popover) {
+        $scope.popover = popover;
+    });
+
+
+    $scope.showKategori = function($event) {
+        document.body.classList.remove('platform-ios');
+        $scope.popover.show($event);
+    };
+    $scope.closePopover = function() {
+        $scope.popover.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.popover.remove();
+    });
+    // Execute action on hide popover
+    $scope.$on('popover.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove popover
+    $scope.$on('popover.removed', function() {
+        // Execute action
+    });
     $scope.filterGambar = function(content) {
         index = $scope.contents.indexOf(content);
-        if(index % 3 == 0) return content; 
+        //console.log($scope.currentKategori)
+        if(index % 3 == 0) 
+            return content; 
+        
     };
     $scope.getid = function(content){
         return $scope.contents.indexOf(content);
@@ -100,6 +171,7 @@ angular.module('almunApp.controllers', [])
         contentFactory.getContents(1)
         .success(function (data) {
             $scope.contents = data.data;
+            $scope.fullcontents = data.data;
             $scope.split_contents = [];
             var j = 0;
             for (var i = 0, len = $scope.contents.length; i < len; i++) {
@@ -190,6 +262,10 @@ angular.module('almunApp.controllers', [])
         contentFactory.getContent(id)
         .success(function (data) {
             $scope.content = data.data;
+            var title = document.getElementsByClassName('title')
+            console.log(title.length)
+            console.log(data)
+            title[0].innerHTML =  $scope.content.judul;
         });
     }
     getContent($stateParams.id);
@@ -205,7 +281,12 @@ angular.module('almunApp.controllers', [])
         getContents();
     };
     $scope.getId = function ( str ){
-        return str.split('v=')[1];
+        str =  str.split('v=')[1];
+        if(str == null)
+            return '';
+        if(str.indexOf('&') != -1)
+            str = str.split('&')[0]
+        return str;
     }
     function getContents() {
         contentFactory.getContents(2)
@@ -438,19 +519,19 @@ angular.module('almunApp.controllers', [])
         return moment(date).format('HH:mm')
     }
     $ionicPlatform.ready(function () {
-        $scope.scheduleSingleNotification = function () {
-            $cordovaLocalNotification.schedule({
-                id: 1,
-                title: 'Title here',
-                text: 'Text here',
-                data: {
-                    customProperty: 'custom value'
-                }
-            }).then(function (result) {
-                // ...
-            });
-        };
-        $scope.scheduleSingleNotification();
+        //$scope.scheduleSingleNotification = function () {
+            //$cordovaLocalNotification.schedule({
+                //id: 1,
+                //title: 'Title here',
+                //text: 'Text here',
+                //data: {
+                    //customProperty: 'custom value'
+                //}
+            //}).then(function (result) {
+                //// ...
+            //});
+        //};
+        //$scope.scheduleSingleNotification();
     });
     $scope.urlBase = $rootScope.baseUrl;
     $scope.content = {};

@@ -1,5 +1,23 @@
 <ion-view align-title="left" view-title="Gambar">
+<ion-nav-buttons side="secondary">
+      <button class="button" ng-click="showKategori($event)">
+          <i class="icon ion-android-more-vertical"></i>
+      </button>
+    </ion-nav-buttons>
+    <ion-content lazy-scroll>
+<script id="my-popover.html" type="text/ng-template">
+  <ion-popover-view>
     <ion-content>
+    <div class="list" >
+            <a class="item" ng-click="changeKategori(kat.id_kategori, kat.kategori)" collection-repeat="kat in kategori">
+{{kat.kategori}}
+            </a>
+            <a class="item" ng-click="changeKategori(0, '')">
+Semua kategori
+            </a>
+    </ion-content>
+  </ion-popover-view>
+</script>
         <ion-refresher
                              pulling-text="Pull to refresh..."
                              on-refresh="doRefresh()">
@@ -9,18 +27,18 @@
             <div class="content-wrap" ng-repeat="content in contents | filter : filterGambar">
                 <div class="row content" >
                     <div class="col col-33" ng-click="detail({{contents[getid(content)].id_content}})">
-                        <div class="img-content" image-lazy-src="{{urlBase}}/{{getThumb(contents[getid(content)].body)}}" image-lazy-background-image="true">
+                        <div class="img-content" image-lazy-src="{{urlBase}}/{{getThumb(contents[getid(content)].body)}}" image-lazy-background-image="true" image-lazy-distance-from-bottom-to-load="100">
                         </div>
                     </div>
 
                     <div class="col col-33" ng-click="detail({{contents[getid(content)+1].id_content}})">
-                        <div class="img-content" image-lazy-src="{{urlBase}}/{{getThumb(contents[ getid(content)+ 1].body)}}" image-lazy-background-image="true">
+                        <div class="img-content" image-lazy-src="{{urlBase}}/{{getThumb(contents[ getid(content)+ 1].body)}}" image-lazy-background-image="true" image-lazy-distance-from-bottom-to-load="100">
                         </div>
                     </div>
 
 
                     <div class="col col-33"  ng-click="detail({{contents[getid(content) + 2].id_content}})">
-                        <div class="img-content" image-lazy-src="{{urlBase}}/{{getThumb(contents[getid(content) + 2].body)}}" image-lazy-background-image="true">
+                        <div class="img-content" image-lazy-src="{{urlBase}}/{{getThumb(contents[getid(content) + 2].body)}}" image-lazy-background-image="true" image-lazy-distance-from-bottom-to-load="100">
                         </div>
                     </div>
                 </div>
